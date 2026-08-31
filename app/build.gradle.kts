@@ -1,7 +1,19 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
+
+val releaseSigningProperties = Properties().apply {
+    val propertiesFile = rootProject.file("release-signing.properties")
+    if (propertiesFile.isFile) {
+        propertiesFile.inputStream().use { load(it) }
+    }
+}
+
+val releaseSigningConfigured = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+    .all { releaseSigningProperties.getProperty(it)?.isNotBlank() == true }
 
 android {
     namespace = "com.example.taskflow"
@@ -11,14 +23,24 @@ android {
         applicationId = "com.example.taskflow"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    if (releaseSigningConfigured) {
+        signingConfigs.create("release") {
+            storeFile = rootProject.file(requireNotNull(releaseSigningProperties.getProperty("storeFile")))
+            storePassword = requireNotNull(releaseSigningProperties.getProperty("storePassword"))
+            keyAlias = requireNotNull(releaseSigningProperties.getProperty("keyAlias"))
+            keyPassword = requireNotNull(releaseSigningProperties.getProperty("keyPassword"))
+        }
+    }
+
     buildTypes {
         getByName("release") {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

@@ -8,11 +8,17 @@ Natural-language extraction is local and has no API key, subscription, or per-us
 
 This is intentionally local language intelligence rather than a cloud LLM: a genuinely open-ended AI model cannot be included at zero ongoing cost without shipping a downloaded model and supporting only capable devices.
 
-## Google setup (required before syncing)
+## Install TaskFlow
+
+Download the current **TaskFlow APK** from the repository's [Releases page](https://github.com/benattobb/TaskFlow/releases), open it on an Android phone, and choose **Install**. Android may ask you to allow installs from the browser or file manager you used to download it.
+
+There are no API keys to create or paste. On first use, tap **Connect Google** and approve the Google Tasks and Calendar permissions for the account you want to use. Your task text remains on your phone until you choose to sync it.
+
+## Maintainer Google setup
 
 1. Create a Google Cloud project and enable **Google Tasks API** and **Google Calendar API**.
 2. Configure the OAuth consent screen and add the Tasks and Calendar scopes requested by the app.
-3. Create an Android OAuth client for `com.example.taskflow` and add the SHA-1 of the signing key you use. For the standard debug key, run `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`.
+3. Create Android OAuth clients for `com.example.taskflow`: one for development and one for the public release signing certificate. The user never needs either key or client ID.
 4. Open this folder in Android Studio, allow Gradle to sync, and run on a Pixel or Android device.
 
 The app requests the narrowest Google scopes available for creating Tasks and Calendar events. It does not read Calendar data. It checks up to 100 open Google Tasks that it previously created only to make a retry safe and avoid duplicate tasks.
@@ -38,7 +44,7 @@ Tap **Start focus** only when beginning an active task. On Android 16+ it explic
 ./gradlew lint testDebugUnitTest assembleDebug
 ```
 
-The resulting debug APK is at `app/build/outputs/apk/debug/app-debug.apk`. A public distribution must be signed with your own release key and the release certificate SHA-1 must be added to the Android OAuth client in Google Cloud.
+The resulting debug APK is at `app/build/outputs/apk/debug/app-debug.apk`. Maintainers can provide `release-signing.properties` locally to sign a release; it is intentionally ignored by Git. The public APK is published on GitHub Releases, so normal users do not need Android Studio, API keys, or a Google Cloud project.
 
 ## Security and privacy
 
