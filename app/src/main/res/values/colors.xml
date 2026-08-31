@@ -1,0 +1,12 @@
+<resources>
+    <color name="task_background">#FCFBF7</color>
+    <color name="task_surface">#FFFFFF</color>
+    <color name="task_text">#20201E</color>
+    <color name="task_muted">#8A8983</color>
+    <color name="task_border">#EAE5D9</color>
+    <color name="task_accent">#658362</color>
+    <color name="widget_background">#FFFFFF</color>
+    <color name="widget_text">#17202B</color>
+    <color name="widget_accent">#658362</color>
+    <color name="widget_border">#EAE5D9</color>
+</resources>

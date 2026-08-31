@@ -1,0 +1,15 @@
+.gradle/
+.android-sdk/
+.idea/
+local.properties
+build/
+app/build/
+*.iml
+.DS_Store
+# Local signing material and distribution builds must never enter source control.
+*.jks
+*.keystore
+*.p12
+*.pem
+*.der
+key.properties

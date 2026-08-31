@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TaskFlow</string>
+    <string name="widget_name">TaskFlow quick capture</string>
+    <string name="widget_add">Add a task</string>
+    <string name="widget_voice_name">TaskFlow voice capture</string>
+    <string name="widget_type_name">TaskFlow type a task</string>
+    <string name="widget_focus_name">TaskFlow focus</string>
+</resources>

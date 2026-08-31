@@ -1,0 +1,30 @@
+[versions]
+agp = "9.1.1"
+kotlin = "2.2.10"
+composeBom = "2024.12.01"
+activityCompose = "1.10.0"
+coreKtx = "1.19.0"
+lifecycle = "2.8.7"
+credentialManager = "1.5.0"
+googleId = "1.1.1"
+work = "2.10.0"
+
+[libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentialManager" }
+androidx-credentials-play-services = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialManager" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleId" }
+androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version = "21.3.0" }
+play-services-auth-base = { module = "com.google.android.gms:play-services-auth-base", version = "18.0.10" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
