@@ -1,6 +1,7 @@
 .gradle/
 .kotlin/
 .firebase/
+hosting/public/*.mp4
 .android-sdk/
 .idea/
 local.properties
