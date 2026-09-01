@@ -135,7 +135,9 @@ class GoogleTaskSync(private val context: Context) {
 
     private fun calendarEventId(taskId: String): String {
         val hash = MessageDigest.getInstance("SHA-256").digest(taskId.toByteArray(StandardCharsets.UTF_8))
-        return "taskflow" + hash.take(20).joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+        // Calendar event IDs are base32hex: lowercase a-v and digits 0-9 only.
+        // "taskflow" contains a `w`, so use a valid deterministic prefix instead.
+        return "taskflov" + hash.take(20).joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
     }
 
     private companion object {
