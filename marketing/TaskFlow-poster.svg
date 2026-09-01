@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FCFBF7"/>
+      <stop offset="1" stop-color="#F3F6F0"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#658362" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#wash)"/>
+  <rect x="34" y="34" width="1132" height="1132" rx="42" fill="none" stroke="#EAE5D9" stroke-width="2"/>
+
+  <g transform="translate(600 270)" filter="url(#shadow)">
+    <rect x="-130" y="-130" width="260" height="260" rx="43" fill="#FCFBF7" stroke="#EAE5D9" stroke-width="5"/>
+    <path d="M-46 0 L-15 31 L49 -35" fill="none" stroke="#20201E" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <text x="600" y="530" text-anchor="middle" fill="#20201E" font-family="Georgia, 'Times New Roman', serif" font-size="96" letter-spacing="-3">TaskFlow</text>
+  <text x="600" y="596" text-anchor="middle" fill="#658362" font-family="Arial, sans-serif" font-size="24" letter-spacing="6">CAPTURE NATURALLY. STAY IN FLOW.</text>
+
+  <g transform="translate(110 680)">
+    <rect width="980" height="300" rx="30" fill="#FFFFFF" stroke="#EAE5D9" stroke-width="2"/>
+    <text x="56" y="66" fill="#20201E" font-family="Arial, sans-serif" font-size="27" font-weight="700">A calmer way to keep up.</text>
+    <g transform="translate(56 108)">
+      <circle cx="14" cy="14" r="14" fill="#658362"/>
+      <path d="M7 14l5 5 10-11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="48" y="23" fill="#20201E" font-family="Arial, sans-serif" font-size="23">Natural language dates, times &amp; repeats</text>
+    </g>
+    <g transform="translate(56 166)">
+      <circle cx="14" cy="14" r="14" fill="#658362"/>
+      <path d="M7 14l5 5 10-11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="48" y="23" fill="#20201E" font-family="Arial, sans-serif" font-size="23">Google Tasks + Calendar, kept in sync</text>
+    </g>
+    <g transform="translate(56 224)">
+      <circle cx="14" cy="14" r="14" fill="#658362"/>
+      <path d="M7 14l5 5 10-11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="48" y="23" fill="#20201E" font-family="Arial, sans-serif" font-size="23">Voice capture + lightweight Pixel widgets</text>
+    </g>
+  </g>
+
+  <text x="600" y="1050" text-anchor="middle" fill="#8A8983" font-family="Arial, sans-serif" font-size="18" letter-spacing="3">OPEN SOURCE • BUILT FOR ANDROID</text>
+  <text x="600" y="1090" text-anchor="middle" fill="#658362" font-family="Arial, sans-serif" font-size="20">github.com/benattobb/TaskFlow</text>
+</svg>
