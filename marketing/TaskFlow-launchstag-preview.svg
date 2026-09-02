@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCFBF7"/><stop offset="1" stop-color="#EFF4EC"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#wash)"/>
+  <rect x="36" y="36" width="1128" height="558" rx="36" fill="#FFFFFF" stroke="#EAE5D9" stroke-width="3"/>
+  <g transform="translate(96 112)">
+    <rect width="120" height="120" rx="30" fill="#FCFBF7" stroke="#EAE5D9" stroke-width="4"/>
+    <path d="M32 60l24 24 48-50" fill="none" stroke="#20201E" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="244" y="166" fill="#20201E" font-family="Georgia, 'Times New Roman', serif" font-size="76">TaskFlow</text>
+  <text x="248" y="210" fill="#658362" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="4">TASKS + CALENDAR</text>
+  <text x="96" y="306" fill="#20201E" font-family="Arial, sans-serif" font-size="38" font-weight="700">Capture tasks naturally. Stay in flow.</text>
+  <text x="96" y="350" fill="#77766F" font-family="Arial, sans-serif" font-size="23">Type or say what you need to do — TaskFlow understands dates, times and repeat patterns.</text>
+  <g transform="translate(96 410)">
+    <circle cx="16" cy="16" r="16" fill="#658362"/><path d="M9 16l6 6 12-14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="48" y="24" fill="#20201E" font-family="Arial, sans-serif" font-size="22">Google Tasks + Calendar sync</text>
+    <circle cx="585" cy="16" r="16" fill="#658362"/><path d="M578 16l6 6 12-14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="617" y="24" fill="#20201E" font-family="Arial, sans-serif" font-size="22">Voice capture + Pixel widgets</text>
+  </g>
+  <text x="96" y="520" fill="#8A8983" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="3">FREE • OPEN SOURCE • BUILT FOR ANDROID</text>
+  <text x="96" y="552" fill="#658362" font-family="Arial, sans-serif" font-size="17">github.com/benattobb/TaskFlow</text>
+</svg>
