@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -120,7 +121,11 @@ class QuickTypeActivity : ComponentActivity() {
                         focusedTextColor = QuickInk, unfocusedTextColor = QuickInk, cursorColor = QuickSage
                     )
                 )
-                preview?.let { QuickPreview(it) }
+                preview?.let { task ->
+                    QuickPreview(task, onTitleChange = { title ->
+                        preview = task.copy(title = title)
+                    })
+                }
                 Button(
                     onClick = {
                         val task = preview ?: return@Button
@@ -162,7 +167,8 @@ class QuickTypeActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun QuickPreview(task: CapturedTask) {
+    private fun QuickPreview(task: CapturedTask, onTitleChange: (String) -> Unit) {
+        var editingTitle by remember(task.sourceText) { mutableStateOf(false) }
         val date = task.dueDate?.format(DateTimeFormatter.ofPattern("EEE, d MMM")) ?: "No date"
         val time = task.dueTime?.format(DateTimeFormatter.ofPattern("h:mm a")) ?: "All day"
         Card(
@@ -171,7 +177,33 @@ class QuickTypeActivity : ComponentActivity() {
             modifier = Modifier.fillMaxWidth().border(1.dp, QuickRule, RoundedCornerShape(18.dp))
         ) {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(task.title, color = QuickInk, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (editingTitle) {
+                        OutlinedTextField(
+                            value = task.title,
+                            onValueChange = onTitleChange,
+                            modifier = Modifier.weight(1f),
+                            label = { Text("Task title") },
+                            singleLine = true,
+                            shape = RoundedCornerShape(12.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = QuickSage, unfocusedBorderColor = QuickRule,
+                                focusedContainerColor = QuickSurface, unfocusedContainerColor = QuickSurface,
+                                focusedTextColor = QuickInk, unfocusedTextColor = QuickInk, cursorColor = QuickSage
+                            )
+                        )
+                    } else {
+                        Text(task.title, modifier = Modifier.weight(1f), color = QuickInk, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                    OutlinedButton(
+                        onClick = { editingTitle = !editingTitle },
+                        modifier = Modifier.padding(start = 8.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, QuickRule),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 9.dp, vertical = 0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = QuickSage)
+                    ) { Text(if (editingTitle) "Done" else "Edit", fontSize = 10.sp) }
+                }
                 Text("$date  ·  $time", color = QuickMuted, fontSize = 13.sp)
                 task.recurrence?.let { Text(it.label.uppercase(), color = QuickSage, fontSize = 10.sp) }
             }

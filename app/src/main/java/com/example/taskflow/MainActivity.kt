@@ -177,7 +177,11 @@ class MainActivity : ComponentActivity() {
                         focusedTextColor = Ink, unfocusedTextColor = Ink, cursorColor = Sage
                     )
                 )
-                preview?.let { task -> ParsePreview(task) }
+                preview?.let { task ->
+                    ParsePreview(task, onTitleChange = { title ->
+                        preview = task.copy(title = title)
+                    })
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
                         onClick = {
@@ -277,18 +281,45 @@ class MainActivity : ComponentActivity() {
     private fun SectionLabel(text: String) = Text(text, fontSize = 11.sp, letterSpacing = 2.sp, color = Muted, fontWeight = FontWeight.Medium)
 
     @Composable
-    private fun ParsePreview(task: CapturedTask) {
+    private fun ParsePreview(task: CapturedTask, onTitleChange: (String) -> Unit) {
+        var editingTitle by remember(task.sourceText) { mutableStateOf(false) }
         val date = task.dueDate?.format(DateTimeFormatter.ofPattern("EEE, d MMM")) ?: "No date"
         val time = task.dueTime?.format(DateTimeFormatter.ofPattern("h:mm a")) ?: "All day"
         Card(colors = CardDefaults.cardColors(containerColor = Surface), shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth().border(1.dp, Rule, RoundedCornerShape(18.dp))) {
             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 Image(painter = painterResource(R.drawable.taskflow_mark), contentDescription = null, modifier = Modifier.size(24.dp))
                 Column(modifier = Modifier.padding(start = 12.dp).weight(1f)) {
-                    Text(task.title, color = Ink, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    if (editingTitle) {
+                        OutlinedTextField(
+                            value = task.title,
+                            onValueChange = onTitleChange,
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text("Task title") },
+                            singleLine = true,
+                            shape = RoundedCornerShape(12.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Sage, unfocusedBorderColor = Rule,
+                                focusedContainerColor = Surface, unfocusedContainerColor = Surface,
+                                focusedTextColor = Ink, unfocusedTextColor = Ink, cursorColor = Sage
+                            )
+                        )
+                    } else {
+                        Text(task.title, color = Ink, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
                     Text("$date  ·  $time", color = Muted, fontSize = 13.sp)
                     task.recurrence?.let { Text(it.label.uppercase(), color = Sage, fontSize = 10.sp, letterSpacing = 1.sp) }
                 }
-                Text("LOCAL", color = Sage, fontSize = 10.sp, letterSpacing = 1.sp)
+                Column(horizontalAlignment = Alignment.End) {
+                    Text("LOCAL", color = Sage, fontSize = 10.sp, letterSpacing = 1.sp)
+                    OutlinedButton(
+                        onClick = { editingTitle = !editingTitle },
+                        modifier = Modifier.padding(top = 6.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, Rule),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 9.dp, vertical = 0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Sage)
+                    ) { Text(if (editingTitle) "Done" else "Edit", fontSize = 10.sp) }
+                }
             }
         }
     }
