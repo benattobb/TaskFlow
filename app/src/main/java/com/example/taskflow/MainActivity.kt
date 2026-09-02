@@ -2,6 +2,7 @@ package com.example.taskflow
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognitionListener
@@ -41,6 +42,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -115,6 +117,10 @@ class MainActivity : ComponentActivity() {
         var focusTasks by remember { mutableStateOf(FocusTaskStore.load(this@MainActivity)) }
         var googleConnected by remember { mutableStateOf(GoogleSignInManager.isConnected(this@MainActivity)) }
         var isConnectingGoogle by remember { mutableStateOf(false) }
+        var availableUpdate by remember { mutableStateOf<AppUpdate?>(null) }
+        LaunchedEffect(Unit) {
+            availableUpdate = UpdateChecker.findAvailable(this@MainActivity)
+        }
         val signIn = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             isConnectingGoogle = false
             googleConnected = GoogleSignInManager.isConnected(this@MainActivity)
@@ -142,6 +148,11 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Header()
+                availableUpdate?.let { update ->
+                    UpdateCard(update = update, onUpdate = {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(update.releaseUrl)))
+                    })
+                }
                 SectionLabel("CAPTURE")
                 OutlinedTextField(
                     value = input,
@@ -279,6 +290,28 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun SectionLabel(text: String) = Text(text, fontSize = 11.sp, letterSpacing = 2.sp, color = Muted, fontWeight = FontWeight.Medium)
+
+    @Composable
+    private fun UpdateCard(update: AppUpdate, onUpdate: () -> Unit) {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = Surface),
+            shape = RoundedCornerShape(18.dp),
+            modifier = Modifier.fillMaxWidth().border(1.dp, Rule, RoundedCornerShape(18.dp))
+        ) {
+            Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("TaskFlow ${update.versionName} is ready", color = Ink, fontWeight = FontWeight.SemiBold)
+                    Text("A newer version is available on GitHub.", color = Muted, fontSize = 13.sp)
+                }
+                OutlinedButton(
+                    onClick = onUpdate,
+                    shape = RoundedCornerShape(12.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Sage),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Sage)
+                ) { Text("Update") }
+            }
+        }
+    }
 
     @Composable
     private fun ParsePreview(task: CapturedTask, onTitleChange: (String) -> Unit) {
