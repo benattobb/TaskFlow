@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <image href="TaskFlow-launchstag-preview.png" x="0" y="0" width="1200" height="630"/>
+  <g transform="translate(935 61)">
+    <rect x="1" y="1" width="196" height="60" rx="14" fill="#ffffff" stroke="#e4e4e7" stroke-width="1.5"/>
+    <g transform="translate(13 11)">
+      <rect width="40" height="40" rx="10" fill="#16150f"/>
+      <g transform="translate(5 5) scale(.25)" fill="#f4f2ec" stroke="#f4f2ec" stroke-width="1.6" stroke-linejoin="round">
+        <polygon points="60,53 73,58 72,80 60,96 48,80 47,58"/><polygon points="73,58 87,50 70,67"/><polygon points="60,55 66,52 89,13"/><polygon points="65,50 69,46 78,26"/><polygon points="71,43 76,38 96,28"/><polygon points="79,31 83,26 99,17"/><polygon points="47,58 33,50 50,67"/><polygon points="60,55 54,52 31,13"/><polygon points="55,50 51,46 42,26"/><polygon points="49,43 44,38 24,28"/><polygon points="41,31 37,26 21,17"/>
+      </g>
+    </g>
+    <text text-anchor="middle" x="128" y="25" font-family="monospace" font-weight="700" font-size="9" letter-spacing="2.2" fill="#a1a1aa">FEATURED ON</text>
+    <text text-anchor="middle" x="128" y="47" font-family="system-ui,sans-serif" font-weight="700" font-size="21" letter-spacing="-.5"><tspan fill="#09090b">Launch</tspan><tspan fill="#a1a1aa">stag</tspan></text>
+  </g>
+</svg>
