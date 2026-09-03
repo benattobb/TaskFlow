@@ -196,12 +196,12 @@ class MainActivity : ComponentActivity() {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
                         onClick = {
-                            if (!googleConnected && !isConnectingGoogle) {
+                            if (!isConnectingGoogle) {
                                 isConnectingGoogle = true
                                 signIn.launch(GoogleSignInManager.client(this@MainActivity).signInIntent)
                             }
                         },
-                        enabled = !googleConnected && !isConnectingGoogle,
+                        enabled = !isConnectingGoogle,
                         shape = RoundedCornerShape(14.dp), border = androidx.compose.foundation.BorderStroke(1.dp, Rule),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = Ink,
