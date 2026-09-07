@@ -23,7 +23,7 @@ There are no API keys to create or paste. On first use, tap **Connect Google** a
 3. Create Android OAuth clients for `com.example.taskflow`: one for development and one for the public release signing certificate. The user never needs either key or client ID.
 4. Open this folder in Android Studio, allow Gradle to sync, and run on a Pixel or Android device.
 
-Public release v1.0.5 requests the `tasks` and `calendar.events` Google scopes. The current source uses the narrower `calendar.events.owned` permission; it has been tested and submitted for verification but has not yet been released or approved.
+Public release v1.0.5 requests the `tasks` and `calendar.events` Google scopes. OAuth App Verification for project `unification-29d5b` has been officially approved by Google for both `tasks` (`.../auth/tasks`) and the narrower `calendar.events.owned` (`.../auth/calendar.events.owned`) scope.
 
 TaskFlow does not read existing Calendar events. When syncing, it reads up to 100 incomplete tasks from your default Google Tasks list, which may include tasks created outside TaskFlow. It filters that response on your device for a matching TaskFlow-created task to reduce duplicates when retrying a sync.
 
