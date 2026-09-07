@@ -20,8 +20,7 @@ import java.security.MessageDigest
 class GoogleTaskSync(private val context: Context) {
     suspend fun sync(task: CapturedTask): SyncResult = withContext(Dispatchers.IO) {
         val account = GoogleSignIn.getLastSignedInAccount(context)?.account ?: return@withContext SyncResult.NotConnected
-        val scope = "oauth2:https://www.googleapis.com/auth/tasks https://www.googleapis.com/auth/calendar.events"
-        val token = GoogleAuthUtil.getToken(context, account, scope)
+        val token = GoogleAuthUtil.getToken(context, account, GoogleOAuthScopes.tokenRequest)
         // Google Tasks stores a due date but silently discards the time component.
         // Keep the time visible in its list UI and preserve an exact timed Calendar event.
         val visibleTime = task.dueTime?.format(DateTimeFormatter.ofPattern("h:mm a", Locale.US))

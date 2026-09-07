@@ -6,10 +6,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 
 object GoogleSignInManager {
-    private val scopes = listOf(
-        Scope("https://www.googleapis.com/auth/tasks"),
-        Scope("https://www.googleapis.com/auth/calendar.events")
-    )
+    private val scopes = GoogleOAuthScopes.permissions.map { Scope(it) }
 
     fun client(context: Context) = GoogleSignIn.getClient(
         context,

@@ -7,6 +7,7 @@ hosting/public/*.mp4
 local.properties
 build/
 app/build/
+local-artifacts/
 *.iml
 .DS_Store
 # Local signing material and distribution builds must never enter source control.
