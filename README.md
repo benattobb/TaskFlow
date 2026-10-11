@@ -45,10 +45,10 @@ Tap **Start focus** only when beginning an active task. On Android 16+ it explic
 ## Build from source
 
 ```bash
-./gradlew lint testDebugUnitTest assembleDebug
+./gradlew lintGithubDebug testGithubDebugUnitTest assembleGithubDebug assemblePlayDebug
 ```
 
-The resulting debug APK is at `app/build/outputs/apk/debug/app-debug.apk`. Maintainers can provide `release-signing.properties` locally to sign a release; it is intentionally ignored by Git. The public APK is published on GitHub Releases, so normal users do not need Android Studio, API keys, or a Google Cloud project.
+The GitHub debug APK is at `app/build/outputs/apk/github/debug/app-github-debug.apk`; the Play debug APK is at `app/build/outputs/apk/play/debug/app-play-debug.apk`. GitHub builds retain the original `com.example.taskflow` identity and support in-app, user-confirmed updates from GitHub Releases. Play builds use `com.benattobb.taskflow` and intentionally exclude sideload self-updating; Play-distributed installs must update through Google Play. Maintainers can provide `release-signing.properties` locally to sign a release; it is intentionally ignored by Git. The public APK is published on GitHub Releases, so normal users do not need Android Studio, API keys, or a Google Cloud project.
 
 ## Security and privacy
 

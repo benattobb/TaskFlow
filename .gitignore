@@ -10,6 +10,7 @@ app/build/
 local-artifacts/
 *.iml
 .DS_Store
+oracleJdk-26.jdk/
 # Local signing material and distribution builds must never enter source control.
 *.jks
 release-signing.properties

@@ -6,7 +6,8 @@
 ## Local Environment & Tooling
 - **Java Home**: OpenJDK 21 (`/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home`) configured automatically via `gradlew` and `gradle.properties`.
 - **Android SDK Location**: Project local SDK at `.android-sdk/` configured in `local.properties`.
-- **Package Name**: `com.example.taskflow`
+- **Application ID (Play Store)**: `com.benattobb.taskflow`
+- **Code Namespace**: `com.example.taskflow`
 
 ## Common Commands
 ### Build & Test
@@ -16,13 +17,13 @@
   ```
 - **Build Debug APK**:
   ```bash
-  ./gradlew assembleDebug
+  ./gradlew assembleGithubDebug
   ```
 - **Run Lint & Verification**:
   ```bash
-  ./gradlew lint testDebugUnitTest assembleDebug
+  ./gradlew lintGithubDebug testGithubDebugUnitTest assembleGithubDebug assemblePlayDebug
   ```
-  *Debug APK location*: `app/build/outputs/apk/debug/app-debug.apk`
+*GitHub debug APK*: `app/build/outputs/apk/github/debug/app-github-debug.apk`; *Play debug APK*: `app/build/outputs/apk/play/debug/app-play-debug.apk`.
 
 ### Firebase Hosting (Web Landing Page)
 - **Firebase CLI**:

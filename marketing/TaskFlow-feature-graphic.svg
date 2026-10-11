@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#18231C"/>
+      <stop offset="100%" stop-color="#24342A"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7DA779"/>
+      <stop offset="100%" stop-color="#A5C89F"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="500" fill="url(#bg)"/>
+
+  <!-- Subtle glow / ambient circles -->
+  <circle cx="820" cy="180" r="220" fill="#7DA779" opacity="0.08"/>
+  <circle cx="200" cy="380" r="180" fill="#A5C89F" opacity="0.05"/>
+
+  <!-- Left Content: Branding & Headlines -->
+  <g transform="translate(80, 95)">
+    <!-- App Logo Icon -->
+    <rect width="90" height="90" rx="22" fill="#FCFBF7"/>
+    <rect x="8" y="8" width="74" height="74" rx="16" fill="#FFFFFF" stroke="#EAE5D9" stroke-width="2"/>
+    <path d="M26 45l12 12 26-28" fill="none" stroke="#20201E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Title & Subtitle -->
+    <text x="114" y="52" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="54" font-weight="800" letter-spacing="-1">TaskFlow</text>
+    <text x="116" y="82" fill="#A5C89F" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="3">ZERO-FRICTION CAPTURE</text>
+
+    <!-- Main Value Prop -->
+    <text x="0" y="165" fill="#F0F5EE" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="-0.5">Capture tasks naturally. Stay in flow.</text>
+    <text x="0" y="202" fill="#B3C4B6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="400">On-device NLP • Google Tasks &amp; Calendar • Focus widgets</text>
+
+    <!-- Badges Row -->
+    <g transform="translate(0, 245)">
+      <!-- Badge 1 -->
+      <rect width="180" height="38" rx="19" fill="#2E4235" stroke="#415C4B" stroke-width="1.5"/>
+      <text x="90" y="24" fill="#E2ECE0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Private &amp; On-Device</text>
+
+      <!-- Badge 2 -->
+      <g transform="translate(195, 0)">
+        <rect width="170" height="38" rx="19" fill="#2E4235" stroke="#415C4B" stroke-width="1.5"/>
+        <text x="85" y="24" fill="#E2ECE0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Voice &amp; Quick Type</text>
+      </g>
+
+      <!-- Badge 3 -->
+      <g transform="translate(380, 0)">
+        <rect width="160" height="38" rx="19" fill="#2E4235" stroke="#415C4B" stroke-width="1.5"/>
+        <text x="80" y="24" fill="#E2ECE0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Material 3 Design</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Right Graphic: Mock UI Card preview -->
+  <g transform="translate(670, 75)">
+    <!-- Task Card 1 -->
+    <rect width="274" height="96" rx="20" fill="#283A2F" stroke="#3E5746" stroke-width="1.5"/>
+    <circle cx="34" cy="48" r="16" fill="#3D5645"/>
+    <path d="M28 48l4 4 8-9" fill="none" stroke="#A5C89F" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="62" y="42" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="600">Review slide deck</text>
+    <text x="62" y="64" fill="#99B39E" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13">Today at 4:30 PM • #work</text>
+
+    <!-- Task Card 2 (Active Focus Card) -->
+    <g transform="translate(-20, 115)">
+      <rect width="294" height="116" rx="22" fill="#314739" stroke="#7DA779" stroke-width="2"/>
+      <rect x="18" y="18" width="60" height="24" rx="12" fill="#7DA779"/>
+      <text x="48" y="34" fill="#18231C" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" text-anchor="middle">FOCUS</text>
+      <text x="18" y="68" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700">Write release notes</text>
+      <text x="18" y="92" fill="#BBD4BD" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13">In progress • 25m remaining</text>
+    </g>
+
+    <!-- Task Card 3 -->
+    <g transform="translate(10, 250)">
+      <rect width="264" height="88" rx="20" fill="#283A2F" stroke="#3E5746" stroke-width="1.5" opacity="0.85"/>
+      <circle cx="32" cy="44" r="15" fill="#3D5645"/>
+      <text x="60" y="39" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">Team standup sync</text>
+      <text x="60" y="59" fill="#99B39E" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13">Tomorrow at 9:00 AM</text>
+    </g>
+  </g>
+</svg>

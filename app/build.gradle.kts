@@ -20,13 +20,25 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.taskflow"
+        applicationId = "com.benattobb.taskflow"
         minSdk = 26
         targetSdk = 37
-        versionCode = 7
-        versionName = "1.0.5"
+        versionCode = 8
+        versionName = "1.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("github") {
+            dimension = "distribution"
+            applicationId = "com.example.taskflow"
+        }
+        create("play") {
+            dimension = "distribution"
+            applicationId = "com.benattobb.taskflow"
+        }
     }
 
     if (releaseSigningConfigured) {
@@ -75,5 +87,7 @@ dependencies {
     implementation(libs.play.services.auth.base)
     implementation(libs.androidx.work.runtime)
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

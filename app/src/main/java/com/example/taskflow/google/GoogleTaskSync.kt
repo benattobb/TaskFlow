@@ -2,14 +2,19 @@ package com.example.taskflow.google
 
 import android.content.Context
 import com.example.taskflow.data.CapturedTask
+import com.example.taskflow.data.LinkedTask
+import com.example.taskflow.data.LinkedTaskStore
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -18,7 +23,9 @@ import java.security.MessageDigest
 
 /** Creates the task and an owned event on the signed-in user's primary calendar. */
 class GoogleTaskSync(private val context: Context) {
-    suspend fun sync(task: CapturedTask): SyncResult = withContext(Dispatchers.IO) {
+    suspend fun sync(task: CapturedTask): SyncResult = syncMutex.withLock { syncInternal(task) }
+
+    private suspend fun syncInternal(task: CapturedTask): SyncResult = withContext(Dispatchers.IO) {
         val account = GoogleSignIn.getLastSignedInAccount(context)?.account ?: return@withContext SyncResult.NotConnected
         val token = GoogleAuthUtil.getToken(context, account, GoogleOAuthScopes.tokenRequest)
         // Google Tasks stores a due date but silently discards the time component.
@@ -32,7 +39,8 @@ class GoogleTaskSync(private val context: Context) {
         }
         // A previous run may have created the Google Task but failed on Calendar.
         // Reuse that TaskFlow entry when retrying instead of creating a duplicate.
-        val taskId = findExistingTaskId(token, googleTaskTitle) ?: post(
+        require(task.title.isNotBlank()) { "Add a task title before syncing." }
+        val taskId = findExistingTaskId(token, googleTaskTitle, task.dueDate?.toString()) ?: post(
             "https://tasks.googleapis.com/tasks/v1/lists/@default/tasks", token,
             JSONObject().apply {
                 put("title", googleTaskTitle)
@@ -45,10 +53,16 @@ class GoogleTaskSync(private val context: Context) {
                 task.dueDate?.let { put("due", it.atStartOfDay(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)) }
             }
         ).getString("id")
-        val eventId = task.dueDate?.let { date ->
+        val createEvent = task.dueDate != null && LinkedTaskStore.createsCalendarEvents(context)
+        val previous = LinkedTaskStore.load(context, account.name).firstOrNull { it.taskId == taskId }
+        var linkedTask = (previous ?: LinkedTask(taskId, task.title)).copy(
+            calendarPending = createEvent && previous?.calendarEventId == null
+        )
+        LinkedTaskStore.save(context, account.name, linkedTask)
+        val eventId = task.dueDate?.takeIf { createEvent }?.let { date ->
             val calendarEventId = calendarEventId(taskId)
             try {
-                post("https://www.googleapis.com/calendar/v3/calendars/primary/events", token, JSONObject().apply {
+                val event = post("https://www.googleapis.com/calendar/v3/calendars/primary/events", token, JSONObject().apply {
                     // A deterministic ID makes retrying safe if the prior request succeeded but its response was lost.
                     put("id", calendarEventId)
                     put("summary", task.title)
@@ -64,31 +78,71 @@ class GoogleTaskSync(private val context: Context) {
                         put("start", JSONObject().put("dateTime", start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)).put("timeZone", zone.id))
                         put("end", JSONObject().put("dateTime", start.plusMinutes(30).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)).put("timeZone", zone.id))
                     }
-                }).getString("id")
+                })
+                linkedTask = linkedTask.copy(calendarUrl = event.optString("htmlLink").takeIf { it.isNotBlank() })
+                event.getString("id")
             } catch (failure: GoogleApiException) {
                 if (failure.statusCode == HttpURLConnection.HTTP_CONFLICT) calendarEventId else throw failure
             }
         }
+        linkedTask = linkedTask.copy(calendarEventId = eventId ?: linkedTask.calendarEventId, calendarPending = false)
+        LinkedTaskStore.save(context, account.name, linkedTask)
         SyncResult.Success(taskId, eventId)
     }
 
+    suspend fun completeTask(task: LinkedTask): Unit = syncMutex.withLock { completeTaskInternal(task) }
+
+    private suspend fun completeTaskInternal(task: LinkedTask): Unit = withContext(Dispatchers.IO) {
+        val account = GoogleSignIn.getLastSignedInAccount(context)?.account ?: error("Connect Google first.")
+        val current = LinkedTaskStore.load(context, account.name).firstOrNull { it.taskId == task.taskId }
+            ?: error("Task belongs to another account.")
+        val token = GoogleAuthUtil.getToken(context, account, GoogleOAuthScopes.tokenRequest)
+        request("https://tasks.googleapis.com/tasks/v1/lists/@default/tasks/${pathSegment(task.taskId)}", token,
+            "PATCH", JSONObject().put("status", "completed"))
+        LinkedTaskStore.save(context, account.name, current.copy(completed = true))
+    }
+
+    suspend fun removeCalendarEvent(task: LinkedTask): Unit = syncMutex.withLock { removeCalendarEventInternal(task) }
+
+    private suspend fun removeCalendarEventInternal(task: LinkedTask): Unit = withContext(Dispatchers.IO) {
+        val account = GoogleSignIn.getLastSignedInAccount(context)?.account ?: error("Connect Google first.")
+        val current = LinkedTaskStore.load(context, account.name).firstOrNull { it.taskId == task.taskId && it.calendarEventId == task.calendarEventId }
+            ?: error("Event belongs to another account.")
+        val eventId = requireNotNull(task.calendarEventId)
+        val token = GoogleAuthUtil.getToken(context, account, GoogleOAuthScopes.tokenRequest)
+        try {
+            request("https://www.googleapis.com/calendar/v3/calendars/primary/events/${pathSegment(eventId)}", token, "DELETE")
+        } catch (failure: GoogleApiException) {
+            if (failure.statusCode !in listOf(404, 410)) throw failure
+        }
+        LinkedTaskStore.save(context, account.name, current.copy(calendarEventId = null, calendarUrl = null, calendarPending = false))
+    }
+
+    private fun pathSegment(value: String) = URLEncoder.encode(value, StandardCharsets.UTF_8.name()).replace("+", "%20")
+
     private fun post(url: String, token: String, body: JSONObject): JSONObject {
+        return request(url, token, "POST", body)
+    }
+
+    private fun request(url: String, token: String, method: String, body: JSONObject? = null): JSONObject {
         val connection = openGoogleConnection(url, token)
         return try {
-            connection.requestMethod = "POST"
-            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
-            connection.doOutput = true
-            val payload = body.toString().toByteArray(StandardCharsets.UTF_8)
-            connection.setFixedLengthStreamingMode(payload.size)
-            connection.outputStream.use { it.write(payload) }
+            connection.requestMethod = method
+            if (body != null) {
+                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+                connection.doOutput = true
+                val payload = body.toString().toByteArray(StandardCharsets.UTF_8)
+                connection.setFixedLengthStreamingMode(payload.size)
+                connection.outputStream.use { it.write(payload) }
+            }
             val stream = if (connection.responseCode in 200..299) connection.inputStream else connection.errorStream
             val response = stream?.bufferedReader()?.use { it.readText() }.orEmpty()
             if (connection.responseCode !in 200..299) throw GoogleApiException("Google sync", connection.responseCode, errorDetail(response))
-            JSONObject(response)
+            if (response.isBlank()) JSONObject() else JSONObject(response)
         } finally { connection.disconnect() }
     }
 
-    private fun findExistingTaskId(token: String, title: String): String? {
+    private fun findExistingTaskId(token: String, title: String, dueDate: String?): String? {
         val connection = openGoogleConnection(
             "https://tasks.googleapis.com/tasks/v1/lists/@default/tasks?showCompleted=false&maxResults=100",
             token
@@ -103,7 +157,8 @@ class GoogleTaskSync(private val context: Context) {
                     (0 until items.length())
                         .map { index -> items.getJSONObject(index) }
                         .firstOrNull { item ->
-                            item.optString("title") == title && item.optString("notes").contains("Created by TaskFlow.")
+                            item.optString("title") == title && item.optString("notes").contains("Created by TaskFlow.") &&
+                                item.optString("due").takeIf { it.isNotBlank() }?.take(10) == dueDate
                         }
                         ?.optString("id")
                 }
@@ -140,6 +195,7 @@ class GoogleTaskSync(private val context: Context) {
     }
 
     private companion object {
+        val syncMutex = Mutex()
         val allowedGoogleHosts = setOf("tasks.googleapis.com", "www.googleapis.com")
     }
 }

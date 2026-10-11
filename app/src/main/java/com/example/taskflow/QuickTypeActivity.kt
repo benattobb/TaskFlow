@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.border
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -89,7 +91,7 @@ class QuickTypeActivity : ComponentActivity() {
 
         Scaffold(containerColor = QuickCanvas) { inset ->
             Column(
-                modifier = Modifier.fillMaxSize().padding(inset).padding(horizontal = 24.dp, vertical = 28.dp),
+                modifier = Modifier.fillMaxSize().padding(inset).verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 28.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -106,6 +108,7 @@ class QuickTypeActivity : ComponentActivity() {
                 }
                 OutlinedTextField(
                     value = input,
+                    enabled = !isSyncing,
                     onValueChange = { value ->
                         input = value
                         preview = value.takeIf { it.isNotBlank() }?.let(parser::parse)
@@ -125,6 +128,7 @@ class QuickTypeActivity : ComponentActivity() {
                     QuickPreview(task, onTitleChange = { title ->
                         preview = task.copy(title = title)
                     })
+                    if (!isSyncing) TaskScheduleControls(task, onChange = { preview = it })
                 }
                 Button(
                     onClick = {
@@ -150,7 +154,7 @@ class QuickTypeActivity : ComponentActivity() {
                             }
                         }
                     },
-                    enabled = preview != null && !isSyncing,
+                    enabled = preview?.title?.isNotBlank() == true && !isSyncing,
                     modifier = Modifier.fillMaxWidth().height(52.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = QuickSage, contentColor = Color.White)
