@@ -4,6 +4,10 @@ An Android/Pixel task-capture app: type a task naturally, parse it on device, th
 
 ![TaskFlow — natural-language task capture for Android](marketing/TaskFlow-poster.png)
 
+### Current app UI
+
+![TaskFlow Home with the new Home, Tasks, and Focus navigation, captured on a Pixel 11 Pro](marketing/screenshots/screenshot_5_navigation_home.png)
+
 ## Cost and privacy
 
 Natural-language extraction is local and has no API key, subscription, or per-use cost. It understands `today`, `tomorrow`, `day after tomorrow`, `this weekend`, weekdays, dates such as `12 Sep`, numeric UK-style dates such as `12/09`, times such as `3pm` or `3:30 pm`, and common repeats such as `every day at 9pm`. It does not send task text to an AI service. Google is contacted only after **Add and sync task** is tapped.
