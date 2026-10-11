@@ -23,7 +23,7 @@ androidx-credentials-play-services = { module = "androidx.credentials:credential
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleId" }
 androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version = "21.3.0" }
-play-services-auth-base = { module = "com.google.android.gms:play-services-auth-base", version = "18.0.10" }
+play-services-auth-base = { module = "com.google.android.gms:play-services-auth-base", version = "18.3.4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
